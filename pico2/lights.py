@@ -4,7 +4,7 @@ import time
 from time import ticks_us, ticks_diff
 
 class Lights:
-    def __init__(self, aura):
+    def __init__(self, aura = False):
         self._pin = Pin(LED, Pin.OUT, value = 0)
         self._aura = aura
         self._state = True # True for On, False for Offf

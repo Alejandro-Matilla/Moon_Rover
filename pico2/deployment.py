@@ -8,7 +8,9 @@ from config import (
     STEPS,
     DELAY,
     SEQUENCE_FULL_STEP,
-    SEQUENCE_HALF_STEP
+    SEQUENCE_HALF_STEP,
+    STEPPER_PWM_B,
+    STEPPER_PWM_A
 
 
 )
@@ -19,6 +21,8 @@ class Stepper_deployer:
         self._channelB = Pin(STEPPER_CHANNEL_B, Pin.OUT, value=0)
         self._channelC = Pin(STEPPER_CHANNEL_C, Pin.OUT, value=0)
         self._channelD = Pin(STEPPER_CHANNEL_D, Pin.OUT, value=0)
+        self._pwmA = Pin(STEPPER_PWM_A, Pin.OUT, value=0)
+        self._pwmB = Pin(STEPPER_PWM_B, Pin.OUT, value=0)
         self.isready = False
         self._steps = int(STEPS)
         self._delay = DELAY
@@ -27,13 +31,18 @@ class Stepper_deployer:
 
 
     def full_extend(self):
+        self._pwmA.high()
+        self._pwmB.high()
         for i in range(self._steps):
-            pattern = self._sequence[i % 8]
+            pattern = self._sequence[i % 4]
 
             for pin, value in zip(self._pins, pattern):
                 pin.value(value)
 
             time.sleep(self._delay)
 
-        self._isready = True
+        self.isready = True
+        self._pwmA.low()
+        self._pwmB.low()
+
 
