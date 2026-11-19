@@ -8,6 +8,8 @@ from navigation import Navigation
 from sensors import Ultrasonic
 from deployment import Stepper_deployer
 from lights import Lights
+from camera import Camera
+from initialize import mission_started
 
 WAITING = 0
 DEPLOYING = 1
@@ -26,6 +28,7 @@ ultrasonic = Ultrasonic()
 deployment = Stepper_deployer()
 lights = Lights(False)
 navigation = Navigation(motors)
+camera = Camera()
 # navigation = Navigation(motors)
 # deployment = Deployment(...)
 # sensors = Sensors(...)
@@ -57,26 +60,22 @@ def update_mission():
     elif state == SEARCHING:
         navigation.search()
 
-        if camera.tag_visible():
+        if camera.tag_detected():
             motors.stop()
             state = ALIGNING
 
     elif state == ALIGNING:
-        if not camera.tag_visible():
+        if not camera.tag_detected():
             motors.stop()
             state = SEARCHING
 
-        elif navigation.align(camera.tag_x()):
+        elif navigation.align(camera.tag["x"]): # This throws an error because it is initialized as None
             state = APPROACHING
 
     elif state == APPROACHING:
-        if not camera.tag_visible():
+        if not camera.tag_detected():
             motors.stop()
             state = SEARCHING
-
-        elif not camera.is_fresh():
-            motors.stop()
-            state = ERROR
 
         elif navigation.approach(camera.distance_cm()):
             state = COMPLETE
@@ -86,7 +85,7 @@ def update_mission():
 
     elif state == ERROR:
         motors.stop()
-        lights.on()
+        lights.off()
 
 while True:
     update_mission()

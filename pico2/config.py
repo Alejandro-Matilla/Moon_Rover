@@ -1,3 +1,7 @@
+# Constants for the initialization
+BUTTON = 17
+PULLUP = False # True for Pull-up resistor, False for Pull-down resistor
+
 # Code for the ultrasonic range finder
 ULTRASONIC_TRIG = 10
 ULTRASONIC_ECHO = 11
@@ -48,6 +52,10 @@ BIN2 = 7
 PWMB = 8
 STBY = 9
 PWM_FREQUENCY_HZ = 20000
+
+# COnstants for the Camera
+WIDTH = 20 # TODO: Replace with actual width in cm of the printed tag
+FOCAL_LENGTH = 300 # TODO: Replace with actual focal length in pixels
 # Flip either direction if its side drives backwards.
 # Code for the search and align
 LEFT_INVERT = False
@@ -57,6 +65,8 @@ ALIGNMENT_TOLERANCE_PX = 10
 ALIGN_SPEED = 0.5
 SEARCH_SPEED = 0.2
 APPROACH_SPEED = 0.1
+
+
 
 
 
